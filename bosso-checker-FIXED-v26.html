@@ -3711,6 +3711,10 @@ function analyzeDebiChecks(allTx){
     .map(t => ({ ...t, explicitFlag: matchFlagWord(t.description) }))
     .sort((a,b) => (a.date||'').localeCompare(b.date||''));
 
+  // v28 (reverted) — briefly disabled entirely, but that went too far: non-debicheck lenders
+  // (Crediwise, Primeloans etc.) are real debt that genuinely belongs in this report, and this
+  // detection (with the v26.1 retail-merchant denylist + 6-digit minimum reference length) was
+  // already correctly excluding Pick n Pay/Woolworths/Uber-style card purchases. Restored.
   const recurringPayments = detectRecurringExternalPayments(allTx);
 
   return { debicheckTx, otherExplicitFlags, recurringPayments };
